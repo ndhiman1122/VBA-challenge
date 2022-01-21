@@ -1,0 +1,68 @@
+Sub stocks()
+
+Dim WS As Worksheet
+    For Each WS In ActiveWorkbook.Worksheets
+    WS.Activate
+
+        Dim ticker As String
+        'Dim vol as Longlong (couldnt run due to excel 32-bit)
+        Dim vol As Double
+        Dim year_open As Double
+        Dim year_close As Double
+
+        Cells(1, 9).Value = "ticker"
+        Cells(1, 10).Value = "yearly_change(whole value)"
+        Cells(1, 11).Value = "yearly_change(percentage)"
+        Cells(1, 12).Value = "total_stock_volume"
+    
+        Summary_Table_Row = 2
+        
+        
+        price_year_open = Cells(2, 3).Value
+
+        For i = 2 To 797712
+
+      
+        If Cells(i - 1, 1) = Cells(i, 1) And Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+      
+          
+            year_close = Cells(i, 6).Value
+            ticker = Cells(i, 1).Value
+            yearly_change = year_close - price_year_open
+            percent_change = (yearly_change / price_year_open)
+            vol = vol + Cells(i, 7).Value
+
+       
+          
+            Range("i" & Summary_Table_Row).Value = ticker
+
+            Range("j" & Summary_Table_Row).Value = yearly_change
+
+            Range("k" & Summary_Table_Row).Value = percent_change
+
+            Range("l" & Summary_Table_Row).Value = vol
+          
+
+            Summary_Table_Row = Summary_Table_Row + 1
+
+            vol = 0
+
+            price_year_open = Cells(i + 1, 3)
+
+
+
+        Else
+
+            vol = vol + Cells(i, 7).Value
+
+
+        End If
+
+
+        Next i
+
+    Next WS
+
+End Sub
+
+
